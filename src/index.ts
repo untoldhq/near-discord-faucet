@@ -7,14 +7,12 @@ require('dotenv').config();
 const token = process.env.TOKEN;
 
 const rest = new REST({ version: '9' }).setToken(token);
-const clientId = '948293756615028747';
-const guildId = '948288880455602176';
+const clientId: string = '948293756615028747';
+const guildId: string = '948288880455602176';
 
 const command = new SlashCommandBuilder().setName('flow').setDescription('Send those tokies');
-console.log(command);
 const commands = [command.toJSON()];
 
-console.log(commands);
 (async () => {
   try {
     console.log('Started refreshing application (/) commands.');
@@ -33,11 +31,10 @@ console.log(commands);
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-
 // When the client is ready, run this code (only once)
 client.once('ready', (thing) => {
-  console.log(client)
-  console.log(thing)
+  // console.log(client)
+  // console.log(thing)
   console.log('Ready!');
 });
 
@@ -48,7 +45,6 @@ client.on('interactionCreate', async interaction => {
     await interaction.reply('💨!');
   }
 });
+
 // Login to Discord with your client's token
 client.login(token);
-
-

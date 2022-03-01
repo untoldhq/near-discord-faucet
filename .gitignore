@@ -1,0 +1,13 @@
+#IDE
+.idea
+
+storage
+node_modules
+*.map
+.env
+
+dist/
+
+# OS X
+.DS_Store
+

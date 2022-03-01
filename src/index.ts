@@ -10,7 +10,14 @@ const rest = new REST({ version: '9' }).setToken(token);
 const clientId: string = '948293756615028747';
 const guildId: string = '948288880455602176';
 
-const command = new SlashCommandBuilder().setName('flow').setDescription('Send those tokies');
+const command = new SlashCommandBuilder()
+  .setName('flow')
+  .setDescription('Send those tokies')
+  .addStringOption(option =>
+    option.setName('near_account_id')
+      .setDescription('The NEAR account to send tokens to')
+      .setRequired(true)
+    );
 const commands = [command.toJSON()];
 
 (async () => {
@@ -42,7 +49,7 @@ client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) return;
 
   if (interaction.commandName === 'flow') {
-    await interaction.reply('💨!');
+    await interaction.reply('💨! ' + interaction.options.getString('near_account_id'));
   }
 });
 

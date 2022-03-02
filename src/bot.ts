@@ -83,8 +83,8 @@ export default class Bot {
           const receiverId = interaction.options.getString('near_account_id');
           const receiver = await this.near.account(receiverId);
           await receiver.state(); // throw an error if we can't check state on this receiver account
-          this.account.sendMoney(receiverId, "5000000000000000000000000");
-          await interaction.reply('🚰 sent 5 NEAR to ' + interaction.options.getString('near_account_id'));
+          this.account.sendMoney(receiverId, process.env.DRIP_AMOUNT);
+          await interaction.reply('🚰 sent ' + process.env.DRIP_AMOUNT_PRETTY + ' to ' + interaction.options.getString('near_account_id'));
         } catch {
           await interaction.reply('🥶 cannot find a NEAR account named ' + interaction.options.getString('near_account_id'));
         }

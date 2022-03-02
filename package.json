@@ -13,7 +13,8 @@
     "@discordjs/rest": "^0.3.0",
     "discord-api-types": "^0.27.3",
     "discord.js": "^13.6.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "near-api-js": "^0.44.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.21",

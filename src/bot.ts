@@ -45,8 +45,8 @@ export default class Bot {
   
   async setupDiscord() {
     const rest = new REST({ version: '9' }).setToken(token);
-    const clientId: string = '948293756615028747';
-    const guildId: string = '948288880455602176';
+    const clientId: string = process.env.DISCORD_CLIENT_ID;
+
     const command = new SlashCommandBuilder()
       .setName('faucet')
       .setDescription('Send those tokies')
@@ -60,7 +60,7 @@ export default class Bot {
       console.log('Started refreshing application (/) commands.');
     
       await rest.put(
-        Routes.applicationGuildCommands(clientId, guildId),
+        Routes.applicationCommands(clientId),
         { body: commands },
       );
     
@@ -87,19 +87,23 @@ export default class Bot {
         await interaction.reply('👷‍♂️ working on it ');
         
         try {
+          if (interaction.user.bot) {
+            await interaction.editReply('🤖 sorry, no robots.');
+            return
+          }
           const receiverId = interaction.options.getString('near_account_id');
           const receiver = await this.near.account(receiverId);
           await receiver.state(); // throw an error if we can't check state on this receiver account
           const [canDrip, nextDrip] = await this.database.canDrip(interaction.user.id, receiverId); 
           if (!canDrip) {
-            await interaction.followUp('⏲ cannot send more tokens just yet, try again ' + moment(nextDrip).fromNow());
+            await interaction.editReply('⏲ cannot send more tokens just yet, try again ' + moment(nextDrip).fromNow());
             return
           }
           await this.account.sendMoney(receiverId, process.env.DRIP_AMOUNT);
           await this.database.insertDrip(interaction.user.id, receiverId);
-          await interaction.followUp('🚰 sent ' + process.env.DRIP_AMOUNT_PRETTY + ' to ' + interaction.options.getString('near_account_id'));
+          await interaction.editReply('🚰 sent ' + process.env.DRIP_AMOUNT_PRETTY + ' to ' + interaction.options.getString('near_account_id'));
         } catch (error) {
-          await interaction.followUp('🥶 cannot find a NEAR account named ' + interaction.options.getString('near_account_id'));
+          await interaction.editReply('🥶 cannot find a NEAR account named ' + interaction.options.getString('near_account_id'));
         }
       }
     });

@@ -92,8 +92,8 @@ export default class Bot {
             return
           }
           const receiverId = interaction.options.getString('near_account_id');
-          const receiver = await this.near.account(receiverId);
-          await receiver.state(); // throw an error if we can't check state on this receiver account
+          // const receiver = await this.near.account(receiverId);
+          // await receiver.state(); // throw an error if we can't check state on this receiver account
           const [canDrip, nextDrip] = await this.database.canDrip(interaction.user.id, receiverId); 
           if (!canDrip) {
             await interaction.editReply('⏲ cannot send more tokens just yet, try again ' + moment(nextDrip).fromNow());
